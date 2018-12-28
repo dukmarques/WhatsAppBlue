@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                         exception = "Erro ao cadastrar usuário: " + e.getMessage();
                         e.printStackTrace();
                     }
-                    Toast.makeText(LoginActivity.this, "Erro ao autenticar usuário!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, exception, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 logUpUser(user);
             }else{
-                Toast.makeText(this, "Preencha o e-mail!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Preencha a senha!", Toast.LENGTH_SHORT).show();
             }
         }else{
             Toast.makeText(this, "Preencha o e-mail!", Toast.LENGTH_SHORT).show();
