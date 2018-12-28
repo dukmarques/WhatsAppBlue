@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "272610518377",
+    "firebase_url": "https://whatsappblue-f28e7.firebaseio.com",
+    "project_id": "whatsappblue-f28e7",
+    "storage_bucket": "whatsappblue-f28e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272610518377:android:d83c8ca0412d6535",
+        "android_client_info": {
+          "package_name": "com.example.eduardo.whatsappblue"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272610518377-fuic16ru3btt2itfbekld672ot4skhss.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eduardo.whatsappblue",
+            "certificate_hash": "55a7c57e611521153389c348df1b4ad45b32db38"
+          }
+        },
+        {
+          "client_id": "272610518377-ifb9h83hquhkonn7aciiamg7rn9t91ii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-CYfY0QOAWVJfWO5NlvJCwFeK18wbMuk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272610518377-ifb9h83hquhkonn7aciiamg7rn9t91ii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
