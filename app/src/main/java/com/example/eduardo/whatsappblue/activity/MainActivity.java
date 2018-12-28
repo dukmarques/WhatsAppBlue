@@ -1,5 +1,6 @@
 package com.example.eduardo.whatsappblue.activity;
 
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,7 +10,12 @@ import android.view.MenuItem;
 
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.fragment.ContactsFragment;
+import com.example.eduardo.whatsappblue.fragment.ConversationsFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -24,6 +30,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarMain);
         toolbar.setTitle("WhatsApp Blue");
         setSupportActionBar(toolbar);
+
+        //Configuring flaps
+        FragmentPagerItemAdapter adapter = new  FragmentPagerItemAdapter(
+                getSupportFragmentManager(),
+                FragmentPagerItems.with(this)
+                .add("Conversas", ConversationsFragment.class)
+                .add("Contatos", ContactsFragment.class)
+                .create()
+        );
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(adapter);
+
+        SmartTabLayout viewPagerTab = findViewById(R.id.viewPagerTab);
+        viewPagerTab.setViewPager(viewPager);
     }
 
     @Override
