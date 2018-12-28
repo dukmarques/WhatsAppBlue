@@ -1,5 +1,6 @@
 package com.example.eduardo.whatsappblue.activity;
 
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 signOutUser();
                 finish();
                 break;
+            case R.id.menuConfigurations:
+                openConfigurations();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -72,5 +76,10 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void openConfigurations(){
+        Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+        startActivity(intent);
     }
 }
