@@ -1,9 +1,11 @@
-package com.example.eduardo.whatsappblue;
+package com.example.eduardo.whatsappblue.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.eduardo.whatsappblue.R;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".RegisterActivity">
+    tools:context=".activity.RegisterActivity">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="200dp"
         android:layout_height="157dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,6 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/editName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/digite_nome"
@@ -53,6 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/digite_email"
@@ -74,6 +77,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/editPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/digite_senha"
@@ -87,9 +91,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:background="@color/colorPrimaryDark"
+        android:onClick="validateUserRegistration"
         android:text="@string/button_register"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
