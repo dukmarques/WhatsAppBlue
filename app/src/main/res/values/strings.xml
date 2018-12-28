@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">WhatsApp Blue</string>
+    <string name="digite_email">Digite seu e-mail</string>
+    <string name="digite_senha">Digite sua senha</string>
+    <string name="button_logar">Logar</string>
+    <string name="register_account">Não tem conta? Cadastre-se</string>
+    <string name="digite_nome">Digite o seu nome</string>
+    <string name="button_register">Cadastrar</string>
 </resources>
