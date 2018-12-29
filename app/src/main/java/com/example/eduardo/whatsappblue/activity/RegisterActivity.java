@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
 import com.example.eduardo.whatsappblue.helper.Base64Custom;
+import com.example.eduardo.whatsappblue.helper.UserFirebase;
 import com.example.eduardo.whatsappblue.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     Toast.makeText(RegisterActivity.this, "Sucesso ao cadastrar usuário!", Toast.LENGTH_SHORT).show();
+                    UserFirebase.attNomeUser(user.getName());
                     finish();
 
                     try{

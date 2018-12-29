@@ -14,17 +14,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
 import com.example.eduardo.whatsappblue.helper.Base64Custom;
 import com.example.eduardo.whatsappblue.helper.Permissions;
 import com.example.eduardo.whatsappblue.helper.UserFirebase;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -41,6 +47,7 @@ public class ConfigActivity extends AppCompatActivity {
     private static final int SELECAO_CAMERA = 100;
     private static final int SELECAO_GALLERY = 200;
     private CircleImageView circleImageViewPerfil;
+    private EditText editPerfilName;
     private StorageReference storageReference;
     private String idUser;
 
@@ -59,12 +66,27 @@ public class ConfigActivity extends AppCompatActivity {
         imageButtonCamera = findViewById(R.id.imageButtonCamera);
         imageButtonGallery = findViewById(R.id.imageButtonGallery);
         circleImageViewPerfil = findViewById(R.id.circleImageViewPhotoPerfil);
+        editPerfilName = findViewById(R.id.editPerfilName);
 
         Toolbar toolbar = findViewById(R.id.toolbarMain);
         toolbar.setTitle("Ajustes");
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Add button back
+
+        //Recovegin data user
+        FirebaseUser user = UserFirebase.getCurrentUser();
+        Uri url = user.getPhotoUrl();
+
+        if (url != null){
+            Glide.with(ConfigActivity.this)
+                    .load(url)
+                    .into(circleImageViewPerfil);
+        }else{
+            circleImageViewPerfil.setImageResource(R.drawable.padrao);
+        }
+
+        editPerfilName.setText(user.getDisplayName());
 
         imageButtonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,22 +136,32 @@ public class ConfigActivity extends AppCompatActivity {
                     byte[] dataImage = baos.toByteArray();
 
                     //Save image firebase
-                    StorageReference imageRef = storageReference
+                    final StorageReference imageRef = storageReference
                             .child("imagens")
                             .child("perfil")
                             //.child(idUser)
                             .child(idUser + ".jpeg");
 
                     UploadTask uploadTask = imageRef.putBytes(dataImage);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                    uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ConfigActivity.this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+                            // Continue with the task to get the download URL
+                            return imageRef.getDownloadUrl();
                         }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(ConfigActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(ConfigActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                                Uri url = task.getResult();
+                                attPhotoUser(url);
+                            } else {
+                                Toast.makeText(ConfigActivity.this,"Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }
@@ -138,6 +170,10 @@ public class ConfigActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void attPhotoUser(Uri url){
+        UserFirebase.attPhotoUser(url);
     }
 
     @Override
