@@ -18,8 +18,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/circleImageViewPhotoPerfil"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/padrao"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
