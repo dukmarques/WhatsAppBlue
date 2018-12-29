@@ -15,9 +15,20 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.eduardo.whatsappblue.R;
+import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.helper.Base64Custom;
 import com.example.eduardo.whatsappblue.helper.Permissions;
+import com.example.eduardo.whatsappblue.helper.UserFirebase;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -30,11 +41,17 @@ public class ConfigActivity extends AppCompatActivity {
     private static final int SELECAO_CAMERA = 100;
     private static final int SELECAO_GALLERY = 200;
     private CircleImageView circleImageViewPerfil;
+    private StorageReference storageReference;
+    private String idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
+
+        //Inital configs
+        storageReference = ConfigurationFirebase.getFirebaseStorage();
+        idUser = UserFirebase.getIdUser();
 
         //Validate Permissions
         Permissions.validatePermissions(requeridPermissions, this, 1);
@@ -90,6 +107,31 @@ public class ConfigActivity extends AppCompatActivity {
 
                 if (image != null){
                     circleImageViewPerfil.setImageBitmap(image);
+
+                    //Recovering data image
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                    byte[] dataImage = baos.toByteArray();
+
+                    //Save image firebase
+                    StorageReference imageRef = storageReference
+                            .child("imagens")
+                            .child("perfil")
+                            //.child(idUser)
+                            .child(idUser + ".jpeg");
+
+                    UploadTask uploadTask = imageRef.putBytes(dataImage);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(ConfigActivity.this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(ConfigActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
             }catch (Exception e){
