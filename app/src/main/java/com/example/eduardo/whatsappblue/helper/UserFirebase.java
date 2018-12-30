@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,5 +69,20 @@ public class UserFirebase {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static User getDataUserLogado(){
+        FirebaseUser firebaseUser = getCurrentUser();
+
+        User user = new User();
+        user.setEmail(firebaseUser.getEmail());
+        user.setName(firebaseUser.getDisplayName());
+
+        if (firebaseUser.getPhotoUrl() == null){
+            user.setPhoto("");
+        }else{
+            user.setPhoto(firebaseUser.getPhotoUrl().toString());
+        }
+        return user;
     }
 }

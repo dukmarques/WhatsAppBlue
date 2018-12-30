@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +25,7 @@ import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
 import com.example.eduardo.whatsappblue.helper.Base64Custom;
 import com.example.eduardo.whatsappblue.helper.Permissions;
 import com.example.eduardo.whatsappblue.helper.UserFirebase;
+import com.example.eduardo.whatsappblue.model.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,8 +50,10 @@ public class ConfigActivity extends AppCompatActivity {
     private static final int SELECAO_GALLERY = 200;
     private CircleImageView circleImageViewPerfil;
     private EditText editPerfilName;
+    private ImageView imageAttName;
     private StorageReference storageReference;
     private String idUser;
+    private User userLogado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class ConfigActivity extends AppCompatActivity {
         //Inital configs
         storageReference = ConfigurationFirebase.getFirebaseStorage();
         idUser = UserFirebase.getIdUser();
+        userLogado = UserFirebase.getDataUserLogado();
 
         //Validate Permissions
         Permissions.validatePermissions(requeridPermissions, this, 1);
@@ -67,9 +72,10 @@ public class ConfigActivity extends AppCompatActivity {
         imageButtonGallery = findViewById(R.id.imageButtonGallery);
         circleImageViewPerfil = findViewById(R.id.circleImageViewPhotoPerfil);
         editPerfilName = findViewById(R.id.editPerfilName);
+        imageAttName = findViewById(R.id.imageAttName);
 
         Toolbar toolbar = findViewById(R.id.toolbarMain);
-        toolbar.setTitle("Ajustes");
+        toolbar.setTitle("Perfil");
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Add button back
@@ -104,6 +110,22 @@ public class ConfigActivity extends AppCompatActivity {
                 Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 if (i.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(i, SELECAO_GALLERY);
+                }
+            }
+        });
+
+        imageAttName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = editPerfilName.getText().toString();
+                boolean retorno = UserFirebase.attNomeUser(name);
+                if (retorno){
+                    userLogado.setName(name);
+                    userLogado.att();
+
+                    Toast.makeText(ConfigActivity.this, "Nome alterado com sucesso", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(ConfigActivity.this, "Não foi possível alterar o nome", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,7 +195,12 @@ public class ConfigActivity extends AppCompatActivity {
     }
 
     public void attPhotoUser(Uri url){
-        UserFirebase.attPhotoUser(url);
+        boolean retorno =  UserFirebase.attPhotoUser(url);
+        if (retorno) {
+            userLogado.setPhoto(url.toString());
+            userLogado.att();
+            Toast.makeText(this, "Sua foto foi alterada", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
