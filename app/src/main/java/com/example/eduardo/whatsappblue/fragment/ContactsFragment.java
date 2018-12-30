@@ -1,6 +1,7 @@
 package com.example.eduardo.whatsappblue.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.eduardo.whatsappblue.R;
+import com.example.eduardo.whatsappblue.activity.ChatActivity;
 import com.example.eduardo.whatsappblue.adapter.ContactsAdapter;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.helper.RecyclerItemClickListener;
+import com.example.eduardo.whatsappblue.helper.UserFirebase;
 import com.example.eduardo.whatsappblue.model.User;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +36,7 @@ public class ContactsFragment extends Fragment {
     private ArrayList<User> contactsList = new ArrayList<>();
     private DatabaseReference usersRef;
     private ValueEventListener valueEventListenerContacts;
+    private FirebaseUser currentUser;
 
     public ContactsFragment() {
         // Required empty public constructor
@@ -45,6 +52,7 @@ public class ContactsFragment extends Fragment {
         //Initial Settings
         recyclerViewListContacts = view.findViewById(R.id.recyclerViewListContacts);
         usersRef = ConfigurationFirebase.getFirebaseDatabase().child("usuarios");
+        currentUser = UserFirebase.getCurrentUser();
 
         //Configure adapter
         adapter = new ContactsAdapter(contactsList, getActivity());
@@ -54,6 +62,31 @@ public class ContactsFragment extends Fragment {
         recyclerViewListContacts.setLayoutManager(layoutManager);
         recyclerViewListContacts.setHasFixedSize(true);
         recyclerViewListContacts.setAdapter(adapter);
+
+        //To set click event on recyclerview
+        recyclerViewListContacts.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getActivity(),
+                        recyclerViewListContacts,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Intent i = new Intent(getActivity(), ChatActivity.class);
+                                startActivity(i);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
 
         return view;
     }
@@ -76,7 +109,11 @@ public class ContactsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dados : dataSnapshot.getChildren()){
                     User user = dados.getValue(User.class);
-                    contactsList.add(user);
+                    String currentUserEmail = currentUser.getEmail();
+
+                    if (!currentUserEmail.equals(user.getEmail())) {
+                        contactsList.add(user);
+                    }
                 }
 
                 adapter.notifyDataSetChanged();
