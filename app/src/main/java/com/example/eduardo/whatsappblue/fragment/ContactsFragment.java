@@ -106,6 +106,8 @@ public class ContactsFragment extends Fragment {
     }
 
     public void recoveringContacts(){
+        contactsList.clear(); //Clear contact list
+        
         valueEventListenerContacts = usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
