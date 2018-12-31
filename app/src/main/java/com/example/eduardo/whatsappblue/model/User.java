@@ -5,10 +5,11 @@ import com.example.eduardo.whatsappblue.helper.UserFirebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User {
+public class User implements Serializable {
     private String idUser;
     private String name;
     private String email;
