@@ -14,7 +14,7 @@
         />
 
     <item android:id="@+id/menuAbout"
-        android:title="Sobre"
+        android:title="Sobre o App"
         app:showAsAction="never"
         />
 
