@@ -109,7 +109,6 @@ public class ContactsFragment extends Fragment {
         valueEventListenerContacts = usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                contactsList.clear();
                 for (DataSnapshot dados : dataSnapshot.getChildren()){
                     User user = dados.getValue(User.class);
                     String currentUserEmail = currentUser.getEmail();
