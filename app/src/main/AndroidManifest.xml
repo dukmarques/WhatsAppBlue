@@ -27,7 +27,7 @@
         <activity android:name=".activity.RegisterActivity" />
         <activity
             android:name=".activity.ConfigActivity"
-            android:parentActivityName=".activity.MainActivity"></activity>
+            android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.ChatActivity"
             android:label="@string/title_activity_chat"
@@ -37,6 +37,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.eduardo.whatsappblue.activity.MainActivity" />
         </activity>
+        <activity android:name=".activity.AboutActivity"></activity>
     </application>
 
 </manifest>

@@ -41,6 +41,9 @@ dependencies {
 
     //Dependence for rounding images
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //Dependence for about scream
+    implementation 'com.github.medyo:android-about-page:1.2.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

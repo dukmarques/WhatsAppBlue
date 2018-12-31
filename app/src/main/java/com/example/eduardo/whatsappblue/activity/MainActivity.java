@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
@@ -17,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+
+import mehdi.sakout.aboutpage.AboutPage;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -65,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menuConfigurations:
                 openConfigurations();
                 break;
+
+            case R.id.menuAbout:
+                openScreamAbout();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -80,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openConfigurations(){
         Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+        startActivity(intent);
+    }
+
+    public void openScreamAbout(){
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 }
