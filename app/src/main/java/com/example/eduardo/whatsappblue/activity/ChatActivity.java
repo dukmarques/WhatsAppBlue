@@ -33,6 +33,8 @@ public class ChatActivity extends AppCompatActivity {
     private CircleImageView circleImageViewPhoto;
     private EditText editMessage;
     private User recipientUser;
+    private DatabaseReference database;
+    private DatabaseReference messagesRef;
 
     //Sender and recipient user identifier
     private String idUserRecipient;
@@ -109,14 +111,21 @@ public class ChatActivity extends AppCompatActivity {
 
     private void saveMessage(String idSender, String idRecipient, Message msg){
         DatabaseReference database = ConfigurationFirebase.getFirebaseDatabase();
-        DatabaseReference messageRef = database.child("mensagens");
-
-        messageRef.child(idSender)
+        messagesRef = database.child("mensagens")
+                .child(idSender)
                 .child(idRecipient)
                 .push()
                 .setValue(msg);
 
         //clear text
         editMessage.setText("");
+    }
+
+    private void recoverMessages(){
+        database = ConfigurationFirebase.getFirebaseDatabase();
+        messagesRef = database.child("mensagens")
+                .child(idUserRecipient)
+                .child(idUserSender);
+
     }
 }
