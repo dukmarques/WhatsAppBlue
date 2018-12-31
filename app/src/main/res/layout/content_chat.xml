@@ -39,7 +39,7 @@
             android:paddingRight="16dp">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/editMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -55,10 +55,11 @@
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/fabSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:onClick="sendMessage"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_send_white_24dp" />
