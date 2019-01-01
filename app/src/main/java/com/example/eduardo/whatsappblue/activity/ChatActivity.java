@@ -115,6 +115,9 @@ public class ChatActivity extends AppCompatActivity {
 
             //save message from sender
             saveMessage(idUserSender, idUserRecipient, message);
+
+            //save message from recipient
+            saveMessage(idUserRecipient, idUserSender, message);
         }else{
             Toast.makeText(this, "Digite uma mensagem para enviar", Toast.LENGTH_SHORT).show();
         }
@@ -146,6 +149,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void recoverMessages(){
+        //clear messages list
+        messagesList.clear();
+
         childEventListenerMessages = messagesRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
