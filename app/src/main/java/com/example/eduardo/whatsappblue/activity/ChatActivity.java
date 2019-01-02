@@ -249,7 +249,7 @@ public class ChatActivity extends AppCompatActivity {
     private void saveConversation(Message msg){
         Conversation conversationSender = new Conversation();
         conversationSender.setIdSender(idUserSender);
-        conversationSender.setIdRecipient(idUserSender);
+        conversationSender.setIdRecipient(idUserRecipient);
         conversationSender.setLastMessage(msg.getMessage());
         conversationSender.setUserExhibition(recipientUser);
 
