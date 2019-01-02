@@ -25,6 +25,7 @@ import com.example.eduardo.whatsappblue.adapter.MessagesAdapter;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
 import com.example.eduardo.whatsappblue.helper.Base64Custom;
 import com.example.eduardo.whatsappblue.helper.UserFirebase;
+import com.example.eduardo.whatsappblue.model.Conversation;
 import com.example.eduardo.whatsappblue.model.Message;
 import com.example.eduardo.whatsappblue.model.User;
 import com.google.android.gms.tasks.Continuation;
@@ -237,9 +238,22 @@ public class ChatActivity extends AppCompatActivity {
 
             //save message from recipient
             saveMessage(idUserRecipient, idUserSender, message);
+
+            //Save conversation
+            saveConversation(message);
         }else{
             Toast.makeText(this, "Digite uma mensagem para enviar", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveConversation(Message msg){
+        Conversation conversationSender = new Conversation();
+        conversationSender.setIdSender(idUserSender);
+        conversationSender.setIdRecipient(idUserSender);
+        conversationSender.setLastMessage(msg.getMessage());
+        conversationSender.setUserExhibition(recipientUser);
+
+        conversationSender.save();
     }
 
     private void saveMessage(String idSender, String idRecipient, Message msg){
