@@ -1,6 +1,7 @@
 package com.example.eduardo.whatsappblue.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,12 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.eduardo.whatsappblue.R;
+import com.example.eduardo.whatsappblue.activity.ChatActivity;
 import com.example.eduardo.whatsappblue.adapter.ConversationsAdapter;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.helper.RecyclerItemClickListener;
 import com.example.eduardo.whatsappblue.helper.UserFirebase;
 import com.example.eduardo.whatsappblue.model.Conversation;
+import com.example.eduardo.whatsappblue.model.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,6 +60,33 @@ public class ConversationsFragment extends Fragment {
         recyclerViewConversations.setLayoutManager(layoutManager);
         recyclerViewConversations.setHasFixedSize(true);
         recyclerViewConversations.setAdapter(adapter);
+
+        //Configure event click
+        recyclerViewConversations.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getActivity(),
+                        recyclerViewConversations,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Conversation selectedConversation = conversationsList.get(position);
+                                Intent i = new Intent(getActivity(), ChatActivity.class);
+                                i.putExtra("contactChat", selectedConversation.getUserExhibition());
+                                startActivity(i);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
 
         //Configure conversationsRef
         String idUser = UserFirebase.getIdUser();
