@@ -1,6 +1,7 @@
 package com.example.eduardo.whatsappblue.model;
 
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.helper.Base64Custom;
 import com.google.firebase.database.DatabaseReference;
 
 import java.io.Serializable;
@@ -18,6 +19,28 @@ public class Group implements Serializable {
 
         String idGroupFirebase = groupRef.push().getKey();
         setId(idGroupFirebase);
+    }
+
+    public void save(){
+        DatabaseReference database = ConfigurationFirebase.getFirebaseDatabase();
+        DatabaseReference groupRef = database.child("grupos");
+
+        groupRef.child(getId()).setValue(this);
+
+        //Save conversation for members
+        for (User member : getMembers()){
+            String idSender = Base64Custom.encodingBase64(member.getEmail());
+            String idRecipient = getId();
+
+            Conversation conversation = new Conversation();
+            conversation.setIdSender(idSender);
+            conversation.setIdRecipient(idRecipient);
+            conversation.setLastMessage("");
+            conversation.setIsGroup("true");
+            conversation.setGroup(this);
+
+            conversation.save();
+        }
     }
 
     public String getId() {

@@ -15,12 +15,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.adapter.GroupSelectedAdapter;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.helper.UserFirebase;
 import com.example.eduardo.whatsappblue.model.Group;
 import com.example.eduardo.whatsappblue.model.User;
 import com.google.android.gms.tasks.Continuation;
@@ -44,6 +46,8 @@ public class GroupRegistrationActivity extends AppCompatActivity {
     private CircleImageView imageGroup;
     private StorageReference storageReference;
     private Group group;
+    private FloatingActionButton fabSaveGroup;
+    private EditText editNameGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +58,6 @@ public class GroupRegistrationActivity extends AppCompatActivity {
         toolbar.setSubtitle("Defina o nome");
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Initial settings
@@ -69,6 +65,8 @@ public class GroupRegistrationActivity extends AppCompatActivity {
         recyclerSelectedMembers = findViewById(R.id.recyclerMembersGroup);
         imageGroup = findViewById(R.id.imageGroup);
         storageReference = ConfigurationFirebase.getFirebaseStorage();
+        fabSaveGroup = findViewById(R.id.fabSaveGroup);
+        editNameGroup = findViewById(R.id.editNameGroup);
         group = new Group();
 
         //Configure event click
@@ -103,6 +101,31 @@ public class GroupRegistrationActivity extends AppCompatActivity {
         recyclerSelectedMembers.setLayoutManager(layoutManagerHorizontal);
         recyclerSelectedMembers.setHasFixedSize(true);
         recyclerSelectedMembers.setAdapter(groupSelectedAdapter);
+
+        //Configure floating action button
+        fabSaveGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Show AlertDialog
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("Salvando a imagem do grupo!");
+                alertDialogBuilder.setCancelable(false);
+
+                final AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+                String nameGroup = editNameGroup.getText().toString();
+
+                //Adds the user list that is logged in
+                selectedMembersList.add(UserFirebase.getDataUserLogado());
+                group.setMembers(selectedMembersList);
+
+                group.setName(nameGroup);
+                group.save();
+
+                alertDialog.dismiss(); //End alertDialog
+            }
+        });
     }
 
     @Override
@@ -110,14 +133,6 @@ public class GroupRegistrationActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
-            // Exibe AlertDialog
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Salvando a imagem do grupo!");
-            alertDialogBuilder.setCancelable(false);
-
-            final AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-
             Bitmap image = null;
 
             try{
@@ -155,8 +170,6 @@ public class GroupRegistrationActivity extends AppCompatActivity {
                                 Toast.makeText(GroupRegistrationActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
                                 String url = task.getResult().toString();
                                 group.setPhoto(url);
-
-                                alertDialog.dismiss();
                             } else {
                                 Toast.makeText(GroupRegistrationActivity.this,"Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
                             }

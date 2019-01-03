@@ -8,8 +8,11 @@ public class Conversation {
     private String idRecipient;
     private String lastMessage;
     private User userExhibition;
+    private String isGroup;
+    private Group group;
 
     public Conversation() {
+        this.setIsGroup("false");
     }
 
     public void save(){
@@ -51,5 +54,21 @@ public class Conversation {
 
     public void setUserExhibition(User userExhibition) {
         this.userExhibition = userExhibition;
+    }
+
+    public String getIsGroup() {
+        return isGroup;
+    }
+
+    public void setIsGroup(String isGroup) {
+        this.isGroup = isGroup;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }
