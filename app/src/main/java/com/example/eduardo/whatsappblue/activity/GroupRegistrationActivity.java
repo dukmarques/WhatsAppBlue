@@ -114,6 +114,10 @@ public class GroupRegistrationActivity extends AppCompatActivity {
 
                 group.setName(nameGroup);
                 group.save();
+
+                Intent i = new Intent(GroupRegistrationActivity.this, ChatActivity.class);
+                i.putExtra("groupChat", group);
+                startActivity(i);
             }
         });
     }

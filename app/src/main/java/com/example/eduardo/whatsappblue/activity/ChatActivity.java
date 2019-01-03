@@ -253,33 +253,60 @@ public class ChatActivity extends AppCompatActivity {
 
     public void sendMessage(View view){
         String textMessage = editMessage.getText().toString();
+
         if (!textMessage.isEmpty()){
-            Message message = new Message();
-            message.setIdUser(idUserSender);
-            message.setMessage(textMessage);
+            if (recipientUser != null){
+                Message message = new Message();
+                message.setIdUser(idUserSender);
+                message.setMessage(textMessage);
 
-            //save message from sender
-            saveMessage(idUserSender, idUserRecipient, message);
+                //save message from sender
+                saveMessage(idUserSender, idUserRecipient, message);
 
-            //save message from recipient
-            saveMessage(idUserRecipient, idUserSender, message);
+                //save message from recipient
+                saveMessage(idUserRecipient, idUserSender, message);
 
-            //Save conversation
-            saveConversation(message);
+                //Save conversation
+                saveConversation(message, false);
+            }else{
+                for (User member : group.getMembers()){
+                    String idSenderGroup = Base64Custom.encodingBase64(member.getEmail());
+                    String idUserLoggedGroup = UserFirebase.getIdUser();
+
+                    Message message = new Message();
+                    message.setIdUser(idUserLoggedGroup);
+                    message.setMessage(textMessage);
+
+                    //Save message to group
+                    saveMessage(idSenderGroup, idUserRecipient, message);
+
+                    //Save conversation group
+                    saveConversation(message, true);
+                }
+            }
         }else{
             Toast.makeText(this, "Digite uma mensagem para enviar", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void saveConversation(Message msg){
+    private void saveConversation(Message msg, boolean isGroup){
         Conversation conversationSender = new Conversation();
         conversationSender.setIdSender(idUserSender);
         conversationSender.setIdRecipient(idUserRecipient);
         conversationSender.setLastMessage(msg.getMessage());
-        conversationSender.setUserExhibition(recipientUser);
 
+        if (isGroup){
+            //Conversation group
+            conversationSender.setIsGroup("true");
+            conversationSender.setGroup(group);
+        }else{
+            //Conversation normal
+            conversationSender.setUserExhibition(recipientUser);
+            conversationSender.setIsGroup("false");
+
+            saveConversationToRecipient(msg);
+        }
         conversationSender.save();
-        saveConversationToRecipient(msg);
     }
 
     private void saveConversationToRecipient(Message msg){

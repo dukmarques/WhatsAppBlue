@@ -52,13 +52,15 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             }
         }else{
             User user = conversation.getUserExhibition();
-            myViewHolder.name.setText(user.getName());
+            if (user != null){
+                myViewHolder.name.setText(user.getName());
 
-            if (user.getPhoto() != null){
-                Uri uri = Uri.parse(user.getPhoto());
-                Glide.with(context).load(uri).into(myViewHolder.photo);
-            }else{
-                myViewHolder.photo.setImageResource(R.drawable.padrao);
+                if (user.getPhoto() != null){
+                    Uri uri = Uri.parse(user.getPhoto());
+                    Glide.with(context).load(uri).into(myViewHolder.photo);
+                }else{
+                    myViewHolder.photo.setImageResource(R.drawable.padrao);
+                }
             }
         }
     }
