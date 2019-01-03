@@ -26,6 +26,7 @@ import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
 import com.example.eduardo.whatsappblue.helper.Base64Custom;
 import com.example.eduardo.whatsappblue.helper.UserFirebase;
 import com.example.eduardo.whatsappblue.model.Conversation;
+import com.example.eduardo.whatsappblue.model.Group;
 import com.example.eduardo.whatsappblue.model.Message;
 import com.example.eduardo.whatsappblue.model.User;
 import com.google.android.gms.tasks.Continuation;
@@ -60,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
     //Sender and recipient user identifier
     private String idUserRecipient;
     private String idUserSender;
+    private Group group;
 
     private RecyclerView recyclerMessages;
     private MessagesAdapter adapter;
@@ -95,21 +97,38 @@ public class ChatActivity extends AppCompatActivity {
         //Recover user data from recipient
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
-            recipientUser = (User) bundle.getSerializable("contactChat");
-            textViewNome.setText(recipientUser.getName());
+            if (bundle.containsKey("groupChat")){
+                group = (Group) bundle.getSerializable("groupChat");
+                idUserRecipient = group.getId();
+                textViewNome.setText(group.getName());
 
-            String photo = recipientUser.getPhoto();
-            if (photo != null){
-                Uri url = Uri.parse(recipientUser.getPhoto());
-                Glide.with(ChatActivity.this)
-                        .load(url)
-                        .into(circleImageViewPhoto);
+                String photo = group.getPhoto();
+                if (photo != null){
+                    Uri url = Uri.parse(photo);
+                    Glide.with(ChatActivity.this)
+                            .load(url)
+                            .into(circleImageViewPhoto);
+                }else{
+                    circleImageViewPhoto.setImageResource(R.drawable.padrao);
+                }
+
             }else{
-                circleImageViewPhoto.setImageResource(R.drawable.padrao);
-            }
+                recipientUser = (User) bundle.getSerializable("contactChat");
+                textViewNome.setText(recipientUser.getName());
 
-            //recover user data from recipient
-            idUserRecipient = Base64Custom.encodingBase64(recipientUser.getEmail());
+                String photo = recipientUser.getPhoto();
+                if (photo != null){
+                    Uri url = Uri.parse(recipientUser.getPhoto());
+                    Glide.with(ChatActivity.this)
+                            .load(url)
+                            .into(circleImageViewPhoto);
+                }else{
+                    circleImageViewPhoto.setImageResource(R.drawable.padrao);
+                }
+
+                //recover user data from recipient
+                idUserRecipient = Base64Custom.encodingBase64(recipientUser.getEmail());
+            }
         }
 
         //Configuring adapter

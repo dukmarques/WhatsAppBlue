@@ -70,9 +70,16 @@ public class ConversationsFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
                                 Conversation selectedConversation = conversationsList.get(position);
-                                Intent i = new Intent(getActivity(), ChatActivity.class);
-                                i.putExtra("contactChat", selectedConversation.getUserExhibition());
-                                startActivity(i);
+
+                                if (selectedConversation.getIsGroup().equals("true")){
+                                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                                    i.putExtra("groupChat", selectedConversation.getGroup());
+                                    startActivity(i);
+                                }else{
+                                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                                    i.putExtra("contactChat", selectedConversation.getUserExhibition());
+                                    startActivity(i);
+                                }
                             }
 
                             @Override

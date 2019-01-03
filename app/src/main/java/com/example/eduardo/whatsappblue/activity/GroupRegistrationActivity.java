@@ -106,14 +106,6 @@ public class GroupRegistrationActivity extends AppCompatActivity {
         fabSaveGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Show AlertDialog
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage("Salvando a imagem do grupo!");
-                alertDialogBuilder.setCancelable(false);
-
-                final AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-
                 String nameGroup = editNameGroup.getText().toString();
 
                 //Adds the user list that is logged in
@@ -122,8 +114,6 @@ public class GroupRegistrationActivity extends AppCompatActivity {
 
                 group.setName(nameGroup);
                 group.save();
-
-                alertDialog.dismiss(); //End alertDialog
             }
         });
     }

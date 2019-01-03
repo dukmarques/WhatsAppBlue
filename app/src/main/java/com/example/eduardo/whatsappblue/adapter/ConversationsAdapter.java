@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.model.Conversation;
+import com.example.eduardo.whatsappblue.model.Group;
 import com.example.eduardo.whatsappblue.model.User;
 
 import java.util.List;
@@ -39,14 +40,26 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         Conversation conversation = conversations.get(i);
         myViewHolder.lastMessage.setText(conversation.getLastMessage());
 
-        User user = conversation.getUserExhibition();
-        myViewHolder.name.setText(user.getName());
+        if (conversation.getIsGroup().equals("true")){
+            Group group = conversation.getGroup();
+            myViewHolder.name.setText(group.getName());
 
-        if (user.getPhoto() != null){
-            Uri uri = Uri.parse(user.getPhoto());
-            Glide.with(context).load(uri).into(myViewHolder.photo);
+            if (group.getPhoto() != null){
+                Uri uri = Uri.parse(group.getPhoto());
+                Glide.with(context).load(uri).into(myViewHolder.photo);
+            }else{
+                myViewHolder.photo.setImageResource(R.drawable.padrao);
+            }
         }else{
-            myViewHolder.photo.setImageResource(R.drawable.padrao);
+            User user = conversation.getUserExhibition();
+            myViewHolder.name.setText(user.getName());
+
+            if (user.getPhoto() != null){
+                Uri uri = Uri.parse(user.getPhoto());
+                Glide.with(context).load(uri).into(myViewHolder.photo);
+            }else{
+                myViewHolder.photo.setImageResource(R.drawable.padrao);
+            }
         }
     }
 
