@@ -36,6 +36,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         User user = contacts.get(i);
+        boolean header = user.getEmail().isEmpty();
 
         myViewHolder.name.setText(user.getName());
         myViewHolder.email.setText(user.getEmail());
@@ -44,7 +45,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             Uri uri = Uri.parse(user.getPhoto());
             Glide.with(context).load(uri).into(myViewHolder.photo);
         }else{
-            myViewHolder.photo.setImageResource(R.drawable.padrao);
+            if (header){
+                myViewHolder.photo.setImageResource(R.drawable.icone_grupo);
+                myViewHolder.email.setVisibility(View.GONE);
+            }else {
+                myViewHolder.photo.setImageResource(R.drawable.padrao);
+            }
         }
     }
 

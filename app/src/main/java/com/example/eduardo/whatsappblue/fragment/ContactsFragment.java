@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.activity.ChatActivity;
+import com.example.eduardo.whatsappblue.activity.GroupActivity;
 import com.example.eduardo.whatsappblue.adapter.ContactsAdapter;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
 import com.example.eduardo.whatsappblue.helper.RecyclerItemClickListener;
@@ -72,9 +73,16 @@ public class ContactsFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
                                 User selectedUser = contactsList.get(position);
-                                Intent i = new Intent(getActivity(), ChatActivity.class);
-                                i.putExtra("contactChat", selectedUser);
-                                startActivity(i);
+                                boolean header = selectedUser.getEmail().isEmpty();
+
+                                if(header){
+                                    Intent i = new Intent(getActivity(), GroupActivity.class);
+                                    startActivity(i);
+                                }else{
+                                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                                    i.putExtra("contactChat", selectedUser);
+                                    startActivity(i);
+                                }
                             }
 
                             @Override
@@ -90,7 +98,19 @@ public class ContactsFragment extends Fragment {
                 )
         );
 
+        headerGroup();
+
         return view;
+    }
+
+    public void headerGroup(){
+        //Define user whit e-mail empty
+        //In case of empty e-mail the user will be used as header, displaying a new group
+        User itemGroup = new User();
+        itemGroup.setName("Novo Grupo");
+        itemGroup.setEmail("");
+
+        contactsList.add(itemGroup);
     }
 
     @Override
@@ -106,11 +126,13 @@ public class ContactsFragment extends Fragment {
     }
 
     public void recoveringContacts(){
-        contactsList.clear(); //Clear contact list
-
         valueEventListenerContacts = usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                contactsList.clear(); //Clear contact list
+
+                headerGroup();
+
                 for (DataSnapshot dados : dataSnapshot.getChildren()){
                     User user = dados.getValue(User.class);
                     String currentUserEmail = currentUser.getEmail();

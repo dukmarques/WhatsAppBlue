@@ -37,7 +37,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.eduardo.whatsappblue.activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.AboutActivity"></activity>
+        <activity android:name=".activity.AboutActivity" />
+        <activity
+            android:name=".activity.GroupActivity"
+            android:label="@string/title_activity_group"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.eduardo.whatsappblue.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
