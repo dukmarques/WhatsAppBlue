@@ -53,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
     private ImageView imageCamera;
     private ImageView imagePhoto;
     private User recipientUser;
+    private User senderUser;
     private DatabaseReference database;
     private StorageReference storage;
     private DatabaseReference messagesRef;
@@ -271,6 +272,17 @@ public class ChatActivity extends AppCompatActivity {
         conversationSender.setIdRecipient(idUserRecipient);
         conversationSender.setLastMessage(msg.getMessage());
         conversationSender.setUserExhibition(recipientUser);
+
+        conversationSender.save();
+        saveConversationToRecipient(msg);
+    }
+
+    private void saveConversationToRecipient(Message msg){
+        Conversation conversationSender = new Conversation();
+        conversationSender.setIdSender(idUserRecipient);
+        conversationSender.setIdRecipient(idUserSender);
+        conversationSender.setLastMessage(msg.getMessage());
+        conversationSender.setUserExhibition(UserFirebase.getDataUserLogado());
 
         conversationSender.save();
     }
