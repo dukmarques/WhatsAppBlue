@@ -151,6 +151,4 @@ public class ContactsFragment extends Fragment {
             }
         });
     }
-
-
 }
