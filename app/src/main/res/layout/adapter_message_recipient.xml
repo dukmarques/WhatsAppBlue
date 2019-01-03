@@ -22,6 +22,13 @@
         android:paddingRight="5dp"
         android:paddingBottom="3dp">
 
+        <TextView
+            android:id="@+id/textNameExhibition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Eduardo Marques"
+            android:textStyle="bold" />
+
         <ImageView
             android:id="@+id/imageMessagePhoto"
             android:layout_width="250dp"

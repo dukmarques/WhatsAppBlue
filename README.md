@@ -14,3 +14,6 @@ https://github.com/MiguelCatalan/MaterialSearchView
 
 Lembrete: criar trla "sobre" usando a biblioteca do app ATM: aula 124
 https://github.com/medyo/android-about-page
+
+
+** Guardar dados localmente com firebase off: https://firebase.google.com/docs/database/android/offline-capabilities?hl=pt-br

@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
     private ImageView imageCamera;
     private ImageView imagePhoto;
     private User recipientUser;
-    private User senderUser;
+    private User userSender;
     private DatabaseReference database;
     private StorageReference storage;
     private DatabaseReference messagesRef;
@@ -97,6 +97,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //Recover user data from sender
         idUserSender = UserFirebase.getIdUser();
+        userSender = UserFirebase.getDataUserLogado();
 
         //Recover user data from recipient
         Bundle bundle = getIntent().getExtras();
@@ -266,8 +267,11 @@ public class ChatActivity extends AppCompatActivity {
                 //save message from recipient
                 saveMessage(idUserRecipient, idUserSender, message);
 
-                //Save conversation
-                saveConversation(message, false);
+                //Save conversation from sender
+                saveConversation(idUserSender, idUserRecipient, recipientUser, message, false);
+
+                //Save conversation from recipient
+                saveConversation(idUserRecipient, idUserSender, userSender, message, false);
             }else{
                 for (User member : group.getMembers()){
                     String idSenderGroup = Base64Custom.encodingBase64(member.getEmail());
@@ -276,12 +280,13 @@ public class ChatActivity extends AppCompatActivity {
                     Message message = new Message();
                     message.setIdUser(idUserLoggedGroup);
                     message.setMessage(textMessage);
+                    message.setName(userSender.getName());
 
                     //Save message to group
                     saveMessage(idSenderGroup, idUserRecipient, message);
 
                     //Save conversation group
-                    saveConversation(message, true);
+                    saveConversation(idSenderGroup, idUserRecipient, recipientUser, message, true);
                 }
             }
         }else{
@@ -289,10 +294,10 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void saveConversation(Message msg, boolean isGroup){
+    private void saveConversation(String idSender, String idRecipient, User userView, Message msg, boolean isGroup){
         Conversation conversationSender = new Conversation();
-        conversationSender.setIdSender(idUserSender);
-        conversationSender.setIdRecipient(idUserRecipient);
+        conversationSender.setIdSender(idSender);
+        conversationSender.setIdRecipient(idRecipient);
         conversationSender.setLastMessage(msg.getMessage());
 
         if (isGroup){
@@ -301,21 +306,9 @@ public class ChatActivity extends AppCompatActivity {
             conversationSender.setGroup(group);
         }else{
             //Conversation normal
-            conversationSender.setUserExhibition(recipientUser);
+            conversationSender.setUserExhibition(userView);
             conversationSender.setIsGroup("false");
-
-            saveConversationToRecipient(msg);
         }
-        conversationSender.save();
-    }
-
-    private void saveConversationToRecipient(Message msg){
-        Conversation conversationSender = new Conversation();
-        conversationSender.setIdSender(idUserRecipient);
-        conversationSender.setIdRecipient(idUserSender);
-        conversationSender.setLastMessage(msg.getMessage());
-        conversationSender.setUserExhibition(UserFirebase.getDataUserLogado());
-
         conversationSender.save();
     }
 
