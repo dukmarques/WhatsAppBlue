@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
     private TextView textViewNome;
+    private TextView textViewParticipantsGroup;
     private CircleImageView circleImageViewPhoto;
     private EditText editMessage;
     private ImageView imageCamera;
@@ -86,6 +88,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //Initial settings
         textViewNome = findViewById(R.id.textViewNameChat);
+        textViewParticipantsGroup = findViewById(R.id.textViewParticipantsGroup);
         circleImageViewPhoto = findViewById(R.id.circleImagePhotoChat);
         editMessage = findViewById(R.id.editMessage);
         recyclerMessages = findViewById(R.id.recyclerMessages);
@@ -102,6 +105,7 @@ public class ChatActivity extends AppCompatActivity {
                 group = (Group) bundle.getSerializable("groupChat");
                 idUserRecipient = group.getId();
                 textViewNome.setText(group.getName());
+                textViewParticipantsGroup.setText(group.participantsNamesToString());
 
                 String photo = group.getPhoto();
                 if (photo != null){
@@ -116,6 +120,7 @@ public class ChatActivity extends AppCompatActivity {
             }else{
                 recipientUser = (User) bundle.getSerializable("contactChat");
                 textViewNome.setText(recipientUser.getName());
+                textViewParticipantsGroup.setVisibility(View.GONE);
 
                 String photo = recipientUser.getPhoto();
                 if (photo != null){

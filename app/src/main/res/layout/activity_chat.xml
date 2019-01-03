@@ -25,14 +25,31 @@
                 android:layout_marginRight="16dp"
                 android:src="@drawable/padrao"/>
 
-            <TextView
-                android:id="@+id/textViewNameChat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Eduardo Marques"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/textViewNameChat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eduardo Marques"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewParticipantsGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Parcitipantes do grupo"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
 

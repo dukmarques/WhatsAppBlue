@@ -74,4 +74,14 @@ public class Group implements Serializable {
     public void setMembers(List<User> members) {
         this.members = members;
     }
+
+    public String participantsNamesToString(){
+        String name = "";
+
+        for (User user : getMembers()){
+            name = name + user.getName() + ", ";
+        }
+
+        return name;
+    }
 }
