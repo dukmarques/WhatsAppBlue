@@ -16,9 +16,11 @@ import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.activity.ChatActivity;
 import com.example.eduardo.whatsappblue.activity.GroupActivity;
 import com.example.eduardo.whatsappblue.adapter.ContactsAdapter;
+import com.example.eduardo.whatsappblue.adapter.ConversationsAdapter;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
 import com.example.eduardo.whatsappblue.helper.RecyclerItemClickListener;
 import com.example.eduardo.whatsappblue.helper.UserFirebase;
+import com.example.eduardo.whatsappblue.model.Conversation;
 import com.example.eduardo.whatsappblue.model.User;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +75,9 @@ public class ContactsFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                User selectedUser = contactsList.get(position);
+                                List<User> contactsListAtt = adapter.getContacts();
+                                User selectedUser = contactsListAtt.get(position);
+
                                 boolean header = selectedUser.getEmail().isEmpty();
 
                                 if(header){
@@ -150,5 +155,25 @@ public class ContactsFragment extends Fragment {
 
             }
         });
+    }
+
+    public void searchContacts(String text){
+        List<User> listContactsSearch = new ArrayList<>();
+
+        for (User user : contactsList){
+            String name = user.getName().toLowerCase();
+            if (name.contains(text)){
+                listContactsSearch.add(user);
+            }
+        }
+        adapter = new ContactsAdapter(listContactsSearch, getActivity());
+        recyclerViewListContacts.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void reloadContacts(){
+        adapter = new ContactsAdapter(contactsList, getActivity());
+        recyclerViewListContacts.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

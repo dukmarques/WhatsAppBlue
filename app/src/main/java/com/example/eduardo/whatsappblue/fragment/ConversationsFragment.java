@@ -69,7 +69,8 @@ public class ConversationsFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Conversation selectedConversation = conversationsList.get(position);
+                                List<Conversation> conversationsListAtt = adapter.getConversations();
+                                Conversation selectedConversation = conversationsListAtt.get(position);
 
                                 if (selectedConversation.getIsGroup().equals("true")){
                                     Intent i = new Intent(getActivity(), ChatActivity.class);
@@ -120,11 +121,20 @@ public class ConversationsFragment extends Fragment {
         List<Conversation> listConversationsSearch = new ArrayList<>();
 
         for (Conversation conversation : conversationsList){
-            String name = conversation.getUserExhibition().getName().toLowerCase();
-            String lastMessage = conversation.getLastMessage().toLowerCase();
+            if (conversation.getUserExhibition() != null){
+                String name = conversation.getUserExhibition().getName().toLowerCase();
+                String lastMessage = conversation.getLastMessage().toLowerCase();
 
-            if (name.contains(text)|| lastMessage.contains(text)){
-                listConversationsSearch.add(conversation);
+                if (name.contains(text)|| lastMessage.contains(text)){
+                    listConversationsSearch.add(conversation);
+                }
+            }else{
+                String name = conversation.getGroup().getName().toLowerCase();
+                String lastMessage = conversation.getLastMessage().toLowerCase();
+
+                if (name.contains(text)|| lastMessage.contains(text)){
+                    listConversationsSearch.add(conversation);
+                }
             }
         }
         adapter = new ConversationsAdapter(listConversationsSearch, getActivity());
