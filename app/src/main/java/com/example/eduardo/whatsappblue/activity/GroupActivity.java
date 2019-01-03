@@ -1,5 +1,6 @@
 package com.example.eduardo.whatsappblue.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class GroupActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private FirebaseUser currentUser;
     private Toolbar toolbar;
+    private FloatingActionButton fabAdvanceRegister;
 
     public void attMembersToolbar(){
         int totalSelected = selectedMembersList.size();
@@ -53,16 +56,6 @@ public class GroupActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Novo grupo");
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Initial Settings
@@ -70,6 +63,7 @@ public class GroupActivity extends AppCompatActivity {
         recyclerSelectedMembers = findViewById(R.id.recyclerSelectedMembers);
         usersRef = ConfigurationFirebase.getFirebaseDatabase().child("usuarios");
         currentUser = UserFirebase.getCurrentUser();
+        fabAdvanceRegister = findViewById(R.id.fabAdvanceRegister);
 
         //Configure adapter
         contactsAdapter = new ContactsAdapter(membersList, getApplicationContext());
@@ -158,6 +152,16 @@ public class GroupActivity extends AppCompatActivity {
                         }
                 )
         );
+
+        //Configure floating action button
+        fabAdvanceRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(GroupActivity.this, GroupRegistrationActivity.class);
+                i.putExtra("members", (Serializable) selectedMembersList);
+                startActivity(i);
+            }
+        });
     }
 
     public void recoveringContacts(){
