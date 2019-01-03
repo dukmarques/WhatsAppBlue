@@ -9,10 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.example.eduardo.whatsappblue.R;
 import com.example.eduardo.whatsappblue.adapter.ContactsAdapter;
+import com.example.eduardo.whatsappblue.adapter.GroupSelectedAdapter;
 import com.example.eduardo.whatsappblue.config.ConfigurationFirebase;
+import com.example.eduardo.whatsappblue.helper.RecyclerItemClickListener;
 import com.example.eduardo.whatsappblue.helper.UserFirebase;
 import com.example.eduardo.whatsappblue.model.User;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,9 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupActivity extends AppCompatActivity {
-    private RecyclerView recyclerSelectedMembers, recyclerMembers;
+    private RecyclerView recyclerMembers;
+    private RecyclerView recyclerSelectedMembers;
     private ContactsAdapter contactsAdapter;
+    private GroupSelectedAdapter groupSelectedAdapter;
     private List<User> membersList = new ArrayList<>();
+    private List<User> selectedMembersList = new ArrayList<>();
     private ValueEventListener valueEventListenerMembers;
     private DatabaseReference usersRef;
     private FirebaseUser currentUser;
@@ -59,11 +65,55 @@ public class GroupActivity extends AppCompatActivity {
         //Configure adapter
         contactsAdapter = new ContactsAdapter(membersList, getApplicationContext());
 
-        //Configure recyclerView
+        //Configure recyclerView to contacts
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerMembers.setLayoutManager(layoutManager);
         recyclerMembers.setHasFixedSize(true);
         recyclerMembers.setAdapter(contactsAdapter);
+
+        recyclerMembers.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getApplicationContext(),
+                        recyclerMembers,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                User selectedUser = membersList.get(position);
+
+                                //Remove selected user
+                                membersList.remove(selectedUser);
+                                contactsAdapter.notifyDataSetChanged();
+
+                                //Add user in selected members list
+                                selectedMembersList.add(selectedUser);
+                                groupSelectedAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
+
+        //Configure adapter to selected members
+        groupSelectedAdapter = new GroupSelectedAdapter(selectedMembersList, getApplicationContext());
+
+        //Configure recyclerView to selected members
+        RecyclerView.LayoutManager layoutManagerHorizontal = new LinearLayoutManager(
+                getApplicationContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+        );
+        recyclerSelectedMembers.setLayoutManager(layoutManagerHorizontal);
+        recyclerSelectedMembers.setHasFixedSize(true);
+        recyclerSelectedMembers.setAdapter(groupSelectedAdapter);
     }
 
     public void recoveringContacts(){
