@@ -109,6 +109,28 @@ public class ConversationsFragment extends Fragment {
         conversationRef.removeEventListener(childEventListenerConversations);
     }
 
+    public void searchConversations(String text){
+        List<Conversation> listConversationsSearch = new ArrayList<>();
+
+        for (Conversation conversation : conversationsList){
+            String name = conversation.getUserExhibition().getName().toLowerCase();
+            String lastMessage = conversation.getLastMessage().toLowerCase();
+
+            if (name.contains(text)|| lastMessage.contains(text)){
+                listConversationsSearch.add(conversation);
+            }
+        }
+        adapter = new ConversationsAdapter(listConversationsSearch, getActivity());
+        recyclerViewConversations.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void reloadConversations(){
+        adapter = new ConversationsAdapter(conversationsList, getActivity());
+        recyclerViewConversations.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
     public void recoveringConversations(){
         conversationsList.clear(); //Clear conversations list
 

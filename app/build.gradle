@@ -44,6 +44,9 @@ dependencies {
 
     //Dependence for about scream
     implementation 'com.github.medyo:android-about-page:1.2.4'
+
+    //Dependence for material search view
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
