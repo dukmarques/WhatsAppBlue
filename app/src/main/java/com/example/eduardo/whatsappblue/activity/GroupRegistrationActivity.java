@@ -127,6 +127,14 @@ public class GroupRegistrationActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
+            // Exibe AlertDialog
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+            alertDialogBuilder.setMessage("Criando grupo");
+            alertDialogBuilder.setCancelable(false);
+
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
             Bitmap image = null;
 
             try{
@@ -164,8 +172,11 @@ public class GroupRegistrationActivity extends AppCompatActivity {
                                 Toast.makeText(GroupRegistrationActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
                                 String url = task.getResult().toString();
                                 group.setPhoto(url);
+
+                                alertDialog.dismiss(); //End alertDialog
                             } else {
                                 Toast.makeText(GroupRegistrationActivity.this,"Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                                alertDialog.dismiss(); //End alertDialog
                             }
                         }
                     });
